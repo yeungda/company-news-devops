@@ -38,6 +38,7 @@ DniKZWb36R7qpO9RMWgHbhUpkcT/EYSutIRgp+hYzQ==</license>
         <approval type="manual" />
         <environmentvariables>
           <variable name="JAVA_HOME">/usr/lib/jvm/java-1.6.0/</variable>
+          <variable name="STOMP_SERVER">127.0.0.1</variable>
         </environmentvariables>
         <jobs>
           <job name="Deploy">
