@@ -31,7 +31,7 @@ namespace :aws do
   end
 
   {"admin_server" => "ManagementConsole", "test_server" => "TestServer"}.each do |file_name, key_name|
-    file "#{BUILD_DIR}/#{file_name}" => [:settings, BUILD_DIR] do
+    file "#{BUILD_DIR}/#{file_name}" => ["aws:settings", BUILD_DIR] do
       cloud = cloud_formation
       stack = find_stack(cloud)
       puts "discovering #{file_name} address...".white

@@ -82,8 +82,13 @@ namespace :mc do
     end
   end
 
-  task :admin_server_address => "#{BUILD_DIR}/admin_server" do
-    ENV['STOMP_SERVER'] = ENV['ADMIN_SERVER'] = File.read("#{BUILD_DIR}/admin_server")
+  task :admin_server_address do
+    if ENV["STOMP_SERVER"]
+      ENV["ADMIN_SERVER"] = ENV["STOMP_SERVER"]
+    else
+      Rake::Task["#{BUILD_DIR}/admin_server"].invoke
+      ENV['STOMP_SERVER'] = ENV['ADMIN_SERVER'] = File.read("#{BUILD_DIR}/admin_server")
+    end
   end
 
   #todo: look at nbn's go. can we refer to the artifact from the previous deploy stage as well?
