@@ -7,7 +7,6 @@ namespace :aws do
   AWS_DIR = "#{File.dirname(__FILE__)}/aws"
   BOOTSTRAP_FILE = "bootstrap.tar.gz"
   STACK_NAME = "company-news"
-  BUCKET_NAME = "#{STACK_NAME}-#{SETTINGS['aws_ssh_key_name']}"
 
   directory BUILD_DIR
 
@@ -76,6 +75,7 @@ namespace :aws do
 
   task :settings do
     SETTINGS = YAML::parse(open("conf/settings.yaml")).transform
+    BUCKET_NAME = "#{STACK_NAME}-#{SETTINGS['aws_ssh_key_name']}"
   end
 
   def s3
