@@ -5,10 +5,6 @@ class admin inherits base {
     ensure => "present"
   }
 
-  package { "bundler":
-    provider => gem,
-  }
-
   package { "tanukiwrapper-3.2.3-1jpp":
     provider => "rpm",
     ensure   => "present",

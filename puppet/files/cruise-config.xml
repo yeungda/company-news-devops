@@ -42,7 +42,7 @@ DniKZWb36R7qpO9RMWgHbhUpkcT/EYSutIRgp+hYzQ==</license>
         <jobs>
           <job name="Deploy">
             <tasks>
-              <exec command="./go" />
+              <exec command="./go" args="mc:deploy[dev]" />
             </tasks>
           </job>
         </jobs>
