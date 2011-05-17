@@ -1,0 +1,20 @@
+[elff]
+name=Enterprise Linux Fast Forward 5 - $basearch
+baseurl=http://download.elff.bravenet.com/5/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ELFF
+
+[elff-debuginfo]
+name=Enterprise Linux Fast Forward 5 - $basearch - Debug
+baseurl=http://download.elff.bravenet.com/5/$basearch/debug
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ELFF
+gpgcheck=1
+
+[elff-source]
+name=Enterprise Linux Fast Forward 5 - $basearch - Source
+baseurl=http://download.elff.bravenet.com/5/SRPMS
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ELFF
+gpgcheck=1

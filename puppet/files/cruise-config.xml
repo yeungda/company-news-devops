@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="24">
+  <server artifactsdir="artifacts">
+    <license user="Fabio Lessa">HU2dlsDkB5ZEsRiIzUyom4w9Igfa340d0UwFnRzPuyHOB0CEFJE4QszFfIqe
+PyU6HuFQ1w1TUTjNbulpLbabf7Vyls3diVAhA2SjWj9lrEwoWHW1HSgoh0Yr
++9o6eqalfC6+c9jhRrq3iAPB1mVXmcGfB3dtTMy5M060EtkFh1IIyRGZcQ3H
+CmMPc+zB8+9P154Ua8y6BBI9iCipCkopZwtdjs6EXl5g2s+kk6StJWk0Mkxw
+1UkUX5bwlfSQ3pNma6gP2znHbDSBR78UsaU3GMkHs+Xi8Ai9Mc5tDSZLdD0Y
+DniKZWb36R7qpO9RMWgHbhUpkcT/EYSutIRgp+hYzQ==</license>
+  </server>
+  <pipelines group="CompanyNews">
+    <pipeline name="MainBuild">
+      <materials>
+        <git url="git://github.com/flessa/company-news.git" />
+      </materials>
+      <stage name="MainBuild">
+        <environmentvariables>
+          <variable name="JAVA_HOME">/usr/lib/jvm/java-1.6.0/</variable>
+        </environmentvariables>
+        <jobs>
+          <job name="MainBuild">
+            <tasks>
+              <exec command="./go" />
+            </tasks>
+            <artifacts>
+              <artifact src="target/companyNews.war" dest="dist" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Development" labeltemplate="${upstreamArtifact}">
+      <materials>
+        <git url="git://github.com/flessa/company-news-devops.git" />
+        <pipeline pipelineName="MainBuild" stageName="MainBuild" materialName="upstreamArtifact"/>
+      </materials>
+      <stage name="Deploy">
+        <approval type="manual" />
+        <environmentvariables>
+          <variable name="JAVA_HOME">/usr/lib/jvm/java-1.6.0/</variable>
+        </environmentvariables>
+        <jobs>
+          <job name="Deploy">
+            <tasks>
+              <exec command="./go" />
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+</cruise>
+

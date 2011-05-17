@@ -1,0 +1,11 @@
+BUILD_DIR = "build"
+
+require 'colorize'
+require 'rake/clean'
+require 'lib/tasks/aws'
+require 'lib/tasks/mcollective'
+require 'lib/tasks/test'
+
+CLEAN.include(BUILD_DIR)
+
+

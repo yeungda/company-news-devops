@@ -1,0 +1,4 @@
+aws_access_key: "REPLACE ME!"
+aws_secret_access_key: "REPLACE ME!"
+aws_ssh_key_name: "REPLACE ME!"
+aws_s3_bucket_name: "REPLACE ME!"

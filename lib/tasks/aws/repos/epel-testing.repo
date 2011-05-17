@@ -1,0 +1,22 @@
+[epel-testing]
+name=Extra Packages for Enterprise Linux 5 - Testing - $basearch 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=testing-epel5&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgcheck=0
+
+[epel-testing-debuginfo]
+name=Extra Packages for Enterprise Linux 5 - Testing - $basearch - Debug
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=testing-debug-epel5&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL
+gpgcheck=1
+
+[epel-testing-source]
+name=Extra Packages for Enterprise Linux 5 - Testing - $basearch - Source
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=testing-source-epel5&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL
+gpgcheck=1

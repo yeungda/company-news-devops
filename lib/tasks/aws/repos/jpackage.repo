@@ -1,0 +1,4 @@
+[jpackage-5.0-generic]
+name=JPackage 5.0, for generic
+mirrorlist=http://www.jpackage.org/mirrorlist.php?dist=generic&type=free&release=5.0
+gpgcheck=0

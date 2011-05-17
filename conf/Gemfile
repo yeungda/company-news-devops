@@ -1,0 +1,7 @@
+source "http://rubygems.org"
+
+gem "fog"
+gem "json"
+gem "rake"
+gem "stomp"
+gem "colorize"

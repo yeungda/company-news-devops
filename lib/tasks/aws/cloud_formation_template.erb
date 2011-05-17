@@ -1,0 +1,175 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Company News infrastructure setup",
+
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "String"
+    },
+
+    "Password": {
+      "Description": "Password for ActiveMQ",
+      "NoEcho": "true",
+      "Type": "String"
+    },
+
+    "PSK": {
+      "Description": "Pre Shared Key for MCollective",
+      "NoEcho": "true",
+      "Type": "String"
+    }
+  },
+
+  "Resources" : {
+    "AdminServer" : {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m1.small",
+        "SecurityGroups": [ { "Ref" : "CompanyNewsSecurityGroup" } ],
+        "AvailabilityZone": "ap-southeast-1b",
+        "ImageId": "ami-6af08e38",
+        "KeyName": { "Ref" : "KeyName" },
+        "Tags": [ { "Key" : "Name", "Value" : "admin-server" } ],
+        "UserData": {
+          "Fn::Base64": {
+          "Fn::Join": [ "\n", [ <%= boot_script.to_json  %>,
+          "admin_server: self",
+          "role: admin"]]
+			    }
+	      }
+      }
+    },
+
+    "DevAppServer" : {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m1.small",
+        "SecurityGroups": [ { "Ref" : "CompanyNewsSecurityGroup" } ],
+        "AvailabilityZone": "ap-southeast-1b",
+        "ImageId": "ami-6af08e38",
+        "KeyName": { "Ref" : "KeyName" },
+        "Tags": [ { "Key" : "Name", "Value" : "dev-app-server" } ],
+        "UserData": {
+          "Fn::Base64": {
+          "Fn::Join": [ "\n", [ <%= boot_script.to_json  %>,
+          {"Fn::Join": [ "", ["admin_server: ", {"Fn::GetAtt": [ "AdminServer", "PrivateIp"  ]}]]},
+          "role: app",
+          "environment: dev"]]
+			    }
+	      }
+      }
+    },
+
+    "UatAppServer" : {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m1.small",
+        "SecurityGroups": [ { "Ref" : "CompanyNewsSecurityGroup" } ],
+        "AvailabilityZone": "ap-southeast-1b",
+        "ImageId": "ami-6af08e38",
+        "KeyName": { "Ref" : "KeyName" },
+        "Tags": [ { "Key" : "Name", "Value" : "uat-app-server" } ],
+        "UserData": {
+          "Fn::Base64": {
+          "Fn::Join": [ "\n", [ <%= boot_script.to_json  %>,
+          {"Fn::Join": [ "", ["admin_server: ", {"Fn::GetAtt": [ "AdminServer", "PrivateIp"  ]}]]},
+          "role: app",
+          "environment: uat"]]
+			    }
+	      }
+      }
+    },
+
+    "ProdAppServer" : {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m1.small",
+        "SecurityGroups": [ { "Ref" : "CompanyNewsSecurityGroup" } ],
+        "AvailabilityZone": "ap-southeast-1b",
+        "ImageId": "ami-6af08e38",
+        "KeyName": { "Ref" : "KeyName" },
+        "Tags": [ { "Key" : "Name", "Value" : "prod-app-server" } ],
+        "UserData": {
+          "Fn::Base64": {
+          "Fn::Join": [ "\n", [ <%= boot_script.to_json  %>,
+          {"Fn::Join": [ "", ["admin_server: ", {"Fn::GetAtt": [ "AdminServer", "PrivateIp"  ]}]]},
+          "role: app",
+          "environment: prod"]]
+			    }
+	      }
+      }
+    },
+
+    "TestServer" : {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m1.small",
+        "SecurityGroups": [ { "Ref" : "CompanyNewsSecurityGroup" } ],
+        "AvailabilityZone": "ap-southeast-1b",
+        "ImageId": "ami-6af08e38",
+        "KeyName": { "Ref" : "KeyName" },
+        "Tags": [ { "Key" : "Name", "Value" : "test-server" } ],
+        "UserData": {
+          "Fn::Base64": {
+          "Fn::Join": [ "\n", [ <%= boot_script.to_json  %>,
+          {"Fn::Join": [ "", ["admin_server: ", {"Fn::GetAtt": [ "AdminServer", "PrivateIp"  ]}]]},
+          "role: app",
+          "environment: test"]]
+			    }
+	      }
+      }
+    },
+
+    "CompanyNewsSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Company News firewall settings",
+        "SecurityGroupIngress": [
+	        {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "8153",
+            "ToPort": "8153",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "8080",
+            "ToPort": "8080",
+            "CidrIp": "0.0.0.0/0"
+          },
+	        {
+            "IpProtocol": "tcp",
+            "FromPort": "6163",
+            "ToPort": "6163",
+            "CidrIp": "0.0.0.0/0"
+	        }
+	      ]
+      }
+    }
+  },
+
+  "Outputs": {
+    "ManagementConsole": {
+      "Value": { "Fn::GetAtt" : [ "AdminServer", "PublicIp" ] },
+      "Description": "Address for the admin server"
+    },
+
+    "TestServer": {
+      "Value": { "Fn::GetAtt" : [ "TestServer", "PublicIp" ] },
+      "Description": "Address for the test server"
+    }
+  }
+}

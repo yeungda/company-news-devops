@@ -1,0 +1,36 @@
+#!/usr/bin/ruby
+require 'uri'
+require 'yaml'
+require 'net/http'
+
+TESTING = ENV['TEST_RUN']
+BASE_DIR = "/tmp/bootstrap"
+BOOTSTRAP_FILE_PATH = "#{BASE_DIR}/<%= BOOTSTRAP_FILE %>"
+
+user_data = YAML::parse(DATA).transform
+user_data['files_dir'] = "#{BASE_DIR}/puppet/files"
+if user_data['role'] == 'admin'
+  user_data['admin_server'] = Net::HTTP.get(URI.parse("http://169.254.169.254/latest/meta-data/public-ipv4"))
+end
+
+unless TESTING
+  %x{mkdir -p #{BASE_DIR}}
+  Net::HTTP.start("s3-ap-southeast-1.amazonaws.com") do |http|
+   resp = http.get("/<%= BUCKET_NAME %>/<%= BOOTSTRAP_FILE %>")
+   File.open(BOOTSTRAP_FILE_PATH, "wb") do |file|
+     file.write(resp.body)
+   end
+  end
+end
+
+%x{tar zxvf #{BOOTSTRAP_FILE_PATH} -C #{BASE_DIR}}
+%x{cp -f #{BASE_DIR}/repos/*.repo /etc/yum.repos.d/}
+%x{yum install -y puppet} unless TESTING
+
+user_data.each { |key, value| ENV["FACTER_#{key}"] = value }
+system("puppet #{ENV['PUPPET_OPTS']} --templatedir #{BASE_DIR}/puppet/templates #{BASE_DIR}/puppet/manifests/#{user_data['role']}.pp")
+
+%x{echo 'environment: #{user_data['environment']}' >> /etc/mcollective/facts.yaml} unless TESTING
+
+__END__
+
