@@ -1,7 +1,7 @@
 import "base.pp"
 
 class admin inherits base {
-  package { ["java-1.6.0-openjdk-devel", "git", "ant", "ruby-devel", "make", "gcc", "libxml2-devel", "libxslt-devel"]:
+  package { ["java-1.6.0-openjdk-devel", "git", "ant", "ruby-devel", "openssl-devel", "make", "gcc", "libxml2-devel", "libxslt-devel"]:
     ensure => "present"
   }
 

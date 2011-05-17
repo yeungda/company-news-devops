@@ -4,7 +4,6 @@ require "fog"
 require "fog/aws/cloud_formation"
 
 namespace :aws do
-  SETTINGS = YAML::parse(open("conf/settings.yaml")).transform
   AWS_DIR = "#{File.dirname(__FILE__)}/aws"
   BOOTSTRAP_FILE = "bootstrap.tar.gz"
   STACK_NAME = "company-news"
@@ -33,7 +32,7 @@ namespace :aws do
   end
 
   {"admin_server" => "ManagementConsole", "test_server" => "TestServer"}.each do |file_name, key_name|
-    file "#{BUILD_DIR}/#{file_name}" => BUILD_DIR do
+    file "#{BUILD_DIR}/#{file_name}" => [:settings, BUILD_DIR] do
       cloud = cloud_formation
       stack = find_stack(cloud)
       puts "discovering #{file_name} address...".white
@@ -46,12 +45,12 @@ namespace :aws do
   end
 
   desc "stops all instances and releases all Amazon resources"
-  task :shutdown do
+  task :shutdown => :settings do
     cloud_formation.delete_stack STACK_NAME
     puts "shutdown command successful".green
   end
 
-  task :upload_bootstrap_files => :package do
+  task :upload_bootstrap_files => [:settings, :package] do
     storage = s3
     directory = nil
     if not storage.directories.get(BUCKET_NAME)
@@ -73,6 +72,10 @@ namespace :aws do
     cp_r "puppet", "#{BUILD_DIR}/package/puppet"
     puts "packaging boostrap files in #{BOOTSTRAP_FILE}"
     %x[cd #{BUILD_DIR}/package; tar -zcf ../#{BOOTSTRAP_FILE} *]
+  end
+
+  task :settings do
+    SETTINGS = YAML::parse(open("conf/settings.yaml")).transform
   end
 
   def s3
