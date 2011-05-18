@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "fog"
+gem "fog", '0.8.1'
 gem "json"
 gem "rake"
 gem "stomp"

@@ -11,7 +11,7 @@ DniKZWb36R7qpO9RMWgHbhUpkcT/EYSutIRgp+hYzQ==</license>
   <pipelines group="CompanyNews">
     <pipeline name="MainBuild">
       <materials>
-        <git url="git://github.com/flessa/company-news.git" />
+        <git url="git://github.com/yeungda/company-news-devops.git" />
       </materials>
       <stage name="MainBuild">
         <environmentvariables>
@@ -29,9 +29,10 @@ DniKZWb36R7qpO9RMWgHbhUpkcT/EYSutIRgp+hYzQ==</license>
         </jobs>
       </stage>
     </pipeline>
+
     <pipeline name="Development" labeltemplate="${upstreamArtifact}">
       <materials>
-        <git url="git://github.com/flessa/company-news-devops.git" />
+        <git url="git://github.com/yeungda/company-news-devops.git" />
         <pipeline pipelineName="MainBuild" stageName="MainBuild" materialName="upstreamArtifact"/>
       </materials>
       <stage name="Deploy">
@@ -49,6 +50,47 @@ DniKZWb36R7qpO9RMWgHbhUpkcT/EYSutIRgp+hYzQ==</license>
         </jobs>
       </stage>
     </pipeline>
+    <pipeline name="uat" labeltemplate="${upstreamArtifact}">
+      <materials>
+        <git url="git://github.com/yeungda/company-news-devops.git" />
+        <pipeline pipelineName="MainBuild" stageName="MainBuild" materialName="upstreamArtifact"/>
+      </materials>
+      <stage name="Deploy">
+        <approval type="manual" />
+        <environmentvariables>
+          <variable name="JAVA_HOME">/usr/lib/jvm/java-1.6.0/</variable>
+          <variable name="STOMP_SERVER">127.0.0.1</variable>
+        </environmentvariables>
+        <jobs>
+          <job name="Deploy">
+            <tasks>
+              <exec command="./go" args="mc:deploy[uat]" />
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Production" labeltemplate="${upstreamArtifact}">
+      <materials>
+        <git url="git://github.com/yeungda/company-news-devops.git" />
+        <pipeline pipelineName="MainBuild" stageName="MainBuild" materialName="upstreamArtifact"/>
+      </materials>
+      <stage name="Deploy">
+        <approval type="manual" />
+        <environmentvariables>
+          <variable name="JAVA_HOME">/usr/lib/jvm/java-1.6.0/</variable>
+          <variable name="STOMP_SERVER">127.0.0.1</variable>
+        </environmentvariables>
+        <jobs>
+          <job name="Deploy">
+            <tasks>
+              <exec command="./go" args="mc:deploy[prod]" />
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+
   </pipelines>
 </cruise>
 

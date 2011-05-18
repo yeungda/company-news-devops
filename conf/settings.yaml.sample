@@ -1,4 +1,4 @@
-aws_access_key: "REPLACE ME!"
-aws_secret_access_key: "REPLACE ME!"
-aws_ssh_key_name: "REPLACE ME!"
-aws_s3_bucket_name: "REPLACE ME!"
+aws_access_key: "AKIAIAZ56UUITIIXJB6Q"
+aws_secret_access_key: "z5LkVmpgS3UZ5ABIHlfzwnpAI1BVP5CsVUw9Ne8Q"
+aws_ssh_key_name: "ec2-singapore"
+aws_s3_bucket_name: "yeungda-fabio-devops"
