@@ -94,7 +94,7 @@ namespace :mc do
   #todo: look at nbn's go. can we refer to the artifact from the previous deploy stage as well?
   def go_artifact_uri
     server = 'ec2-122-248-228-70.ap-southeast-1.compute.amazonaws.com'
-    pipeline_counter = ENV['GO_PIPELINE_COUNTER']
+    pipeline_counter = ENV['GO_PIPELINE_LABEL']
     stage_counter = ENV['GO_STAGE_COUNTER']
     url = "http://#{server}:8153/go/files/MainBuild/#{pipeline_counter}/MainBuild/#{stage_counter}/MainBuild/dist/companyNews.war"
     puts url
