@@ -96,7 +96,9 @@ namespace :mc do
     server = 'ec2-122-248-228-70.ap-southeast-1.compute.amazonaws.com'
     pipeline_counter = ENV['GO_PIPELINE_COUNTER']
     stage_counter = ENV['GO_STAGE_COUNTER']
-    "http://#{server}:8153/go/files/MainBuild/#{pipeline_counter}/MainBuild/#{stage_counter}/MainBuild/dist/companyNews.war"
+    url = "http://#{server}:8153/go/files/MainBuild/#{pipeline_counter}/MainBuild/#{stage_counter}/MainBuild/dist/companyNews.war"
+    puts url
+    url
   end
 
 
